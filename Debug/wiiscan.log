@@ -1,0 +1,5 @@
+﻿  wiiscan.cpp
+c:\users\josemart\projects\wiimote\wiiscantray-1.0_demo\wiiscantray\wiimote-windows-connector\src\file.h(30): warning C4244: 'return': conversion from 'std::streamoff' to 'std::size_t', possible loss of data
+c:\users\josemart\projects\wiimote\wiiscantray-1.0_demo\wiiscantray\wiimote-windows-connector\src\wiiscan.h(1084): warning C4995: 'BluetoothAuthenticateDevice': name was marked as #pragma deprecated
+  wiiscan.vcxproj -> C:\Users\josemart\Projects\WiiMote\wiiscantray-1.0_demo\wiiscantray\wiimote-windows-connector\Debug\wiiscan.exe
+  wiiscan.vcxproj -> C:\Users\josemart\Projects\WiiMote\wiiscantray-1.0_demo\wiiscantray\wiimote-windows-connector\Debug\wiiscan.pdb (Full PDB)

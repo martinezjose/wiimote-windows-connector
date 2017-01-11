@@ -1,0 +1,153 @@
+INSTALLATION 
+
+	Version: 0.9
+	
+	Procedure for wiiscan or wiiscantray:
+	
+	Prerequisites
+	
+		1a: unzip the wiiscan zip file(s).
+	
+		1b: if you are not running a Microsoft Bluetooth stack, then change it from Widcomm, Bluesoleil or whatever you are using. See the file CHANGINGBTSTACK.rtf.
+	
+	Running
+		
+		1a: GUI version, run "wiiscantray.exe" in bin/Release or bin/Debug directory.
+		
+		1b: CLI version, run "wiiscan.exe" in bin/Release or bin/Debug directory from a command prompt.
+	
+	User optimizations:
+
+		Tune scan speed by giving wiiscan your specific wiimote address. Run "wiiscan -s nintendo" from a prompt to find the address, or use the windows system setting.
+
+		Replace the "allowed_wiimote_adr=00:00:00:00:00:00" by our specific addres in the wiiscan.ini file, and lower the value of "option_timeout" to 1000 or 2000.
+
+		Avoid annoying baloon tips by running:  "popup_disable.reg" found in src/wiiscan-0.9.zip, under Tools.
+
+		Avoid annoying crash reports from the Wiimote library by running: "no_error_report.reg" found the same place as above.
+
+ENJOY
+	Mar 26 2009
+
+	Carsten Frigaard,
+	MergeIt ApS, Kongsvang  Allé  37,  DK-8000  Århus  C, www.mergit.dk
+
+
+INSTALLATION 
+
+	Version: 0.8
+
+	Procedure for wiiscan or wiiscantray:
+
+	Prerequisites
+
+		1a: unzip the wiiscan zip file (wiiscan-0.8.zip, wiiscantray-0.8.zip or wiiscan-0.8-release-1.0.zip)
+
+		1b: if you are not running a Microsoft Bluetooth stack, then change it from Widcomm, Bluesoleil or whatever you are using. See the file CHANGINGBTSTACK.rtf.
+ 
+	Testing the exe files
+
+		2: run the wiiscan.exe --- if it terminates with an error indicating that it can not run the executable, you will need to recompile the .exe from the source code, or install .NET framework 3.5 SP1. Otherwise goto 5.
+
+		Note: even though the executable is a primitive console app it apparently needs a .NET framework! You can install .NET framework 3.5 SP1 or just install the Visual Studio C++ Express compiler (that also installs the needed framework).
+
+	Rebuilding the source code
+
+		3a: Install VS express form http://www.microsoft.com/express/vc/ [version: Microsoft Visual C++ 2008 Express Edition with SP1 - ENU]
+
+		3b: Open the wiiscan.sln and rebuild the executable.
+
+		3c: Re-try to launch wiiscan.exe (as in 2).
+
+	Finding and testing the +5V power in the USB controllers [do this, only if USB Hub power control is needed, that is the case of no USBmicro device hardware]
+
+		4a: download free, but non-redistributable, device console program, devcon.exe, from http:support.microsoft.com/kb/311272
+
+		4b: unzip devcon.zip and copy devcon.exe (i386/devcon.exe) to path (say copy it into c:\WINDOWS\ directory)
+
+		4c: Some USB controllers cannot do a power-down; it seems that ICH7 controllers are not able to cut the power while ICH9 controllers can.
+
+			On an ASUS eee PC the controller version reads
+
+				"Intel(R) 82801G (ICH7 Family) USB Universal Host Controller"
+				"Intel(R) 82801G (ICH7 Family) USB2 Enhanced Host Controller"
+
+			On a Lenovo R599 the controller version reads
+
+				"Intel(R) ICH9 Family USB Universal Host Controller"
+				"Intel(R) ICH9 Family USB2 Enhanced Host Controller"
+
+			where only the later (ICH9) is usable for the wiimote auto-power procedure here. Check our system specification, before proceeding.
+
+		4d: Find the id of the USB hubs on the system, open "Control panel | System | Hardware |  Device management" and look for USB-controllers.
+
+			Open the USB-controller tap and write down the address of all the USB Universal host controllers, and USB2 Enhanced host controllers.
+
+			The id of the controllers are found by right-clicking on the device, selecting "Properties | Details"
+
+			On my eee PC I have four Intel controllers
+
+				PCI\VEN_8086&DEV_27C8&SUBSYS_830F1043&REV_02\3&11583659&0&E8
+				PCI\VEN_8086&DEV_27C9&SUBSYS_830F1043&REV_02\3&11583659&0&E9
+				PCI\VEN_8086&DEV_27CA&SUBSYS_830F1043&REV_02\3&11583659&0&EA
+				PCI\VEN_8086&DEV_27CB&SUBSYS_830F1043&REV_02\3&11583659&0&EB
+
+			and one USB2 controller
+
+				PCI\VEN_8086&DEV_27CC&SUBSYS_830F1043&REV_02\3&11583659&0&EF
+
+			Try to manually disable all the controllers bu
+
+				>  devcon status "@PCI\VEN_8086&DEV_27C8&SUBSYS_830F1043&REV_02\3&11583659&0&E8"
+
+			or, if possible, you could use a pattern match to select all the devices...for my particular system the following expression works
+
+				> devcon status "@PCI\VEN_8086&DEV_27C*&SUBSYS_830F1043&REV_02\3&11583659&0&E*"
+
+			Then disable all devices
+
+				> devcon disable "@PCI\VEN_8086&DEV_27C*&SUBSYS_830F1043&REV_02\3&11583659&0&E*"
+
+			and check the result in the windows device manager (or manually disable all the USB controllers here)
+
+			Finally, pick an active controller and put its address into the wiiscan.ini file, for my particular setup the file then reads
+
+				% Configfile_begin
+				% config file for wiiscan
+					all_usb_hubs="@PCI\VEN_8086&DEV_27C*&SUBSYS_830F1043&REV_02\3&11583659&0&E*"
+					active_usb_hub="@PCI\VEN_8086&DEV_27C8&SUBSYS_830F1043&REV_02\3&11583659&0&E8"
+					allowed_wiimote_adr=00:00:00:00:00:00
+					whiteboard_software="d:/WiimoteWhiteboard/WiimoteWhiteboard_v0.3.exe"
+				% Configfile_end
+
+			It is not that important to choose a particular USB controller as the active one, important is that power is only cut to the USB when ALL controllers are disabled, and on when just a single controller is enabled.
+
+		Note: the use of other USB devices may be troublesome, when powering the wiimote over USB as here. It is not recommended to use USB devices together with this procedure!!
+
+	Add the addresses of your wiimotes to the .ini file
+
+		5: To enable faster an more robust connection, find and add all wiimote addresses to the .ini file in the form of a single address or a list, say
+
+				allowed_wiimote_adr=00:19:FD:CC:60:61 00:19:1D:D6:65:E5
+
+	Test an automated, unattended connection
+
+		6; Re-run the wiiscan.exe in a console. If it still fails try to give it a -v option for verbose output, tune the timing parameters (-b,-t,-u,-w), or mail all the results to me: carsten AT mergit.dk
+
+	Run the wiiscantray GUI version
+
+		7; Run wiiscantray.exe,
+
+			* click on "Rescan for wiimotes" to connect.
+
+			* click "Start whiteboard..." to start the whiteboard executable. Use the option "option_startwhiteboard=1" in the .ini file to start the software after a successful connection.
+
+			* click "Display log..." to show the log output, enable and control the log via the options "option_logfile=wiiscan_log.txt" and "option_debug=1
+
+			* use "Reset log..." to clear the log.
+
+ENJOY
+	Feb 12 2009
+
+	Carsten Frigaard,
+	MergeIt ApS, Kongsvang  Allé  37,  DK-8000  Århus  C, www.mergit.dk

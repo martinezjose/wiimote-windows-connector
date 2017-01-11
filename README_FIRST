@@ -1,0 +1,136 @@
+Copyright © 2008 MergeIt, Aps.
+License GPLv3+: GNU GPL version 3 or later <http:\/\/gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Permission to use, copy, modify, and distribute this software
+and its documentation for any purpose and without fee is hereby granted, provided that
+the above copyright notice appear in all copies and that both that copyright notice
+and this permission notice appear in supporting documentation.
+
+WIISCAN/WIISCANTRAY:
+	a connection utility for wii console remotes - this version is rewritten to
+	encompass permanent pairing of a wiimote and a Windows PC.
+
+VERSION:
+	1.0 demo, (note that the source is not "cleaned" up yet)
+
+INSTALL:
+	Just run bin/Release/wiiscantray.
+
+	Right-click on the trayicon to see menu; use register to pair a wiimote;
+	use unregister to remove the pairing.
+
+	Be sure to unregister all wiimotes, before doing a fresh paring.
+
+	IMPORTANT: Modify the address in the Release/wiiscan.ini file to make the
+	connection more robust: replace the line "allowed_wiimote_adr=00:00:00:00:00:00"
+	with your specific address, like "allowed_wiimote_adr=00:22:D7:94:13:2B".
+
+	The paring between a wiimote and a PC consist of:
+
+		1: Hard-syncing the wiimote, to get it to know the PC bluetooth address.
+
+		2: Establish a paring-key between the wiimote and the PC. This is initiated
+		on the PC side, using the bluetooth adapters MAC address as key. The
+		PC BT radio key could be something like "00:50:B6:A0:48:8C", such that
+		the paring key gets to be:
+
+			// adr of btadapter
+			WCHAR pass[6];
+			pass[0]=0x8C;
+			pass[1]=0x48;
+			pass[2]=0xA0;
+			pass[3]=0xB6;
+			pass[4]=0x50;
+			pass[5]=0x00;
+
+		in c-code, and what is then needed is a simple call to the authentication
+		procedure, like
+
+			DWORD r=BluetoothAuthenticateDevice(0,hRadio,&bdi,pass,6);
+
+		The problem of entering some hex values in a GUI paring window, is hence
+		solved by programmatic doing the same thing. BT address entries of the
+		form ":00:" is also only (and always) encountered in the end of the address.
+		Notice also that the BT MAC address is read from the right to the left, that
+		is from least-significant-byte to most-significant-byte (this explains some
+		of the confusion regarding "reversing the MAC address byte order").
+
+		3: Once a pairing have been established, it persist! Check the pairing status
+		by looking into the Bluetooth device properties.
+
+		4: Powering the wiimote down and up; that is pressing the power-button for a
+		couple of seconds, and then pressing a soft-sync button, like "1-2",
+		immediately reestablish the connection. No software external software is
+		involved in this process, but the wiiscantray will try to continuously
+		monitor the connection.
+
+		5: And, voila...from here you can run all the Whiteboard software.
+
+	Once paired, the wiimote and PC keeps the pairing information, and it as such
+	persist through both a PC shutdown/restart and wiimote power-down (press the
+	wiimote power button for a couple of second) and soft-resync, that is a "1-2"
+	keypress or likewise.
+
+	A peculiarity in the pairing process, is that it only seems to work stable after
+	a long period, say a minute. Hence the software wait a long time, such that the
+	connection is stable. This may be attributed to some unknown "Windows-features",
+	but the long wait is only necessary at a hard-sync, so its really a minor
+	problem. This problem may be attributed to the BT caching mechanism in Windows.
+
+	Do not hard-sync the wiimote after a successful pairing.
+
+	Old pairing to other computers are lost, as they should be, when paring the
+	wiimote with a new computer.
+
+	Two PC in close vicinity, with unique wiimote pairing, do not interfere with
+	each other. They pair individual to their respective wiimote, as expected.
+	The hard-sync registering phase, may however require a setup of a single online
+	PC and wiimote only (not tested).
+
+	A severe problem, is however, that the wiimote may try connect with the BT
+	address, of the lowest order. A current observed defect is that an otherwise
+	perfect paired wiimote and PC may not be able to reestablish the connection if
+	another, secondary BT adapter is switch on. The problem needs to be further investigated.
+
+	The wiiscantray continuously polls the BT connection, using the MS Bluetooth API,
+	but this may sometimes cause interference with the pairing. A better solution is
+	on its way. You can exit the wiiscantray software immediately after a successful
+	pairing, if you experience problems.
+
+PREREQUISITES:
+	.NET framework 3.5
+	Windows XP or above.
+	Microsoft Bluetooth stack.
+	Bluetooth radio compatible with the wii-remote.
+
+NOTE:
+	If you are running a non-Microsoft Bluetooth stack (like Widcomm),
+	you must follow the procedure found in the document doc/CHANGEINGBTSTACK.rtf
+
+TEST:
+	The software was tested under these three setups:
+
+		1: Lenovo Thinkpad R500
+		XP professional, version 2002, SP2
+		Trendnet TBW-102UB bluetooht dongle (=Broadcom Ultimate Low Cost Bluetooth 2.0+EDR USB), driver 5.1.2535.0
+		Microsoft BT stack, driver 5.1.2600.2180
+
+		2: "bambus" PC
+		XP professional, SP3
+		Trendnet TBW-102UB bluetooth dongle (=Broadcom Ultimate Low Cost Bluetooth 2.0+EDR USB), driver 5.1.2535.0
+		Microsoft BT stack, driver 5.1.2600.5512
+
+		3: eeePC (does not work 100% stable)
+		XP Home,version 2002, SP3
+		Azware BT252 bluetooth dongle, driver 5.1.2600.5512
+		Microsoft BT stack, driver 5.1.2600.5512
+
+		(Not tested yet: "bambus" PC
+		Vista Buissnes
+		Trendnet TBW-102UB bluetooht dongle (=Broadcom Ultimate Low Cost Bluetooth 2.0+EDR USB)
+		Microsoft BT stack, driver ??
+		)
+
+	Not tested: multiple simultaneous wiimote connections to the same computer.

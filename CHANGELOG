@@ -1,0 +1,59 @@
+Copyright © 2008 MergeIt, Aps.
+License GPLv3+: GNU GPL version 3 or later <http:\/\/gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Permission to use, copy, modify, and distribute this software
+and its documentation for any purpose and without fee is hereby granted, provided that
+the above copyright notice appear in all copies and that both that copyright notice
+and this permission notice appear in supporting documentation.
+
+WIISCAN:
+	a connection utility for wii console remotes
+
+VERSION:
+	0.9
+	
+	Added:
+	
+	    * wildcard matches on wiimote adr.
+	    
+	    * changed wiiscantray to hook into wiimotelib poll (major change).
+	    
+	    * allowed for seamless connection with wiiscantray.
+	    
+	    * (numerious minor changes, fixes)
+
+VERSION:
+	0.8
+	
+	Added: 
+		* Minor code refactoring.
+
+		* Configfile entries for all options. Change the order of parsing options, first look in configfile, then read the command line (that eventually overrules the configfile options).
+
+		* Modified wiiscan.ini file to be more versatile.
+		
+		* Added logging class, rewritten logging method.
+		
+		* Changed calls to System, to CreatProc, that do not display a console window (for win trayicon mode).
+		
+		* Changed project settings, links with MT lib instead of MT DLL; fixes strange MS bug when not being able to find msvcp90.dll and friends.
+		
+		* Added hardware support for USBmicro IO board; power-control now possible with this board instead of the USB controller.
+		
+		* Added USBio up/down functionality.
+		
+		* Added usbmsleep, postsleep after USBmicro up/down cycle.		
+
+	Fixed:
+		* Fix of defect "1: restart pop-up":  the 'Change of system settings ... Do you want to reboot now?' popup, happens only when the program runs for longer than 19 seconds. Keeping the connection time within 19 sec seems to cure the problem, Adding a sleep at the end of the program, say Sleep(20000) will eventually bring up the dialog again. The dialog can anyway safely be ignored!
+
+		* Fix of defect "2: discoverable mode fast shutdown": Initialization of wiilib has been rewritten, making it recall the HID initialization routine. Code for testing the wiimote connection has also been introduced.	
+
+		* Fixed defect "15: BluetoothFindFirstDevice() stalls".
+
+VERSION:
+	0.7
+
+	First published version.

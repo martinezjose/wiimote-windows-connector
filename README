@@ -1,0 +1,25 @@
+Copyright © 2008 MergeIt, Aps.
+License GPLv3+: GNU GPL version 3 or later <http:\/\/gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Permission to use, copy, modify, and distribute this software
+and its documentation for any purpose and without fee is hereby granted, provided that
+the above copyright notice appear in all copies and that both that copyright notice
+and this permission notice appear in supporting documentation.
+
+WIISCAN:
+	a connection utility for wii console remotes
+
+VERSION:
+	0.9
+
+INSTALL:
+	just run Release/wiiscan or Release/wiiscantray
+
+DOC:
+	read wiiscan.1 ("man ./wiiscan.1" or "more wiiscan.1.txt")
+
+NOTE:
+	modify the Release/wiiscan.ini file according to the USB hub device remarks in the documentation before runnnig wiiscan!
+

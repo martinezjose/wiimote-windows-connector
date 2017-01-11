@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{a2ac65b4-5163-4ee0-8f21-158cf47d432f}</UniqueIdentifier>
+      <Extensions>*.h</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\args.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\configfile.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DelcomDLL.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\exception.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\file.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\funs.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\stringfun.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\toolsfun.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\USBDevice.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\usbm.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\wiiscan.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\wiiuse.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CHANGEINGBTSTACK" />
+    <None Include="CHANGELOG" />
+    <None Include="INSTALL" />
+    <None Include="LICENSE" />
+    <None Include="README" />
+    <None Include="README_FIRST" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\USBDevice.cpp" />
+    <ClCompile Include="src\wiiscan.cpp" />
+  </ItemGroup>
+</Project>
